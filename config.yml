@@ -1,5 +1,4 @@
-# Your Disqus shortname
-#structure: ''
-#gallery_path: ''
-#description_begin: ''
-#description_end: ''
+# Configuration file for Gallery
+
+setting: value
+gallery_path: /galerien
