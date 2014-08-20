@@ -38,29 +38,33 @@ class Extension extends \Bolt\BaseExtension
     {
         // If your extension has a 'config.yml', it is automatically loaded.
         if (empty($this->config['gallery_path'])) { $this->config['gallery_path'] = "gallerys/"; }
+        if (empty($this->config['gallery_template'])) { $this->config['gallery_template'] = 'gallery_list.twig';}
+        if (empty($this->config['contenttype_name'])) { $this->config['contenttype_name'] = 'Galerien';}
 
         // Initialize the Twig function
-        $this->addTwigFunction('image_scr', 'twigImage_scr');
         $this->addTwigFunction('GalleryList', 'twigGalleryList');
 
     }
 
-
-    /**
-     * Twig function {{ image_scr('foo') }} in Gallery extension.
-     */
-    public function twigImage_scr($param="")
-    {
-        $html = $this->config['gallery_path'];
-
-        return new \Twig_Markup($html, 'UTF-8');
-
-    }
     
-    public function twigGalleryList($folder="")
+    public function twigGalleryList($slug="", $slugDate="")
     {
-        $path = $this->app['paths']['filespath'].$this->config['gallery_path'].$folder;
-        $online_path = $this->app['paths']['files'].$this->config['gallery_path'].$folder;
+    
+    
+        $contenttypes = $this->app['config']->get('contenttypes');
+        $records = $this->app['storage']->getContent($this->config['contenttype_name']);
+        
+        foreach( $records as $record){
+            if( $record['slug'] == $slug and $record['date'] == $slugDate){
+                $record_found = $record;
+                break;
+            }
+        }
+        $date_conv = strtotime($record_found['date']);
+        $folder = '/'.date('Y',$date_conv).'/'.date('F',$date_conv).'/'.$slug.'/';
+    
+        $path = $this->app['paths']['filespath'].'/'.$this->config['gallery_path'].$folder;
+        $online_path = $this->config['gallery_path'].$folder;
         $images = glob($path . "*.{jpg,JPG,jpeg,JPEG}", GLOB_BRACE);
         $image_array =array();
         foreach( $images as $image) {
@@ -69,22 +73,31 @@ class Extension extends \Bolt\BaseExtension
    	        $exif_ifd0 = exif_read_data ( $image ,'IFD0' ,0 );
    	        $exif = exif_read_data ( $image ,'EXIF' ,0 );
        	    
-            $data['image']  = $online_path.pathinfo($image)['basename'];
-            $data['date']  = date ("YmdHis", filemtime($image));
-            $data['Model'] = $exif_ifd0['Model'];
+            $data['path']  = $online_path.pathinfo($image)['basename'];
+            $data['name'] = preg_replace("/[^a-z0-9.]+/i", " ", pathinfo($image)['filename']);
+            $data['uploadDate']  = date ("Y-m-d H:i:s", filemtime($image));
+            $data['model'] = $exif_ifd0['Model'];
             $data['focalLenth'] = $this->exif_get_length($exif);
             $data['shutterSpeed'] = $this->exif_get_shutter($exif);
             $data['fStop'] = $this->exif_get_fstop($exif);
             $data['ISO'] = $exif['ISOSpeedRatings'];
-            $data['time'] = str_replace(':', '', (str_replace(' ', '', $exif_ifd0['DateTime'])));
+            $time = explode(" ", $exif_ifd0['DateTime']);
+            $data['time'] = str_replace(':', '-', $time[0]).' '.$time[1];
             array_push($image_array,$data);
         }
         
-        usort($image_array, function($a, $b) {
-            return $a['time'] - $b['time'];
-        });
+       // usort($image_array, function($a, $b) {
+       //    return $a['time'] - $b['time'];
+       // });
+                // add 'assets/' to the twigloader, so it can find the templates there.
+        $this->app['twig.loader.filesystem']->addPath(__DIR__.'/assets/');
+ 
+        // render the template.
+        $html = $this->app['twig']->render($this->config['gallery_template'], array(
+            'gallery' => $image_array,
+        ));
         
-        return $image_array;
+        return new \Twig_Markup($html, 'UTF-8');
         
 
     }

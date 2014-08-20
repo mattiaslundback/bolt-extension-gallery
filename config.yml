@@ -1,4 +1,4 @@
 # Configuration file for Gallery
 
-setting: value
-gallery_path: /galerien
+gallery_path: galerien    # example: /files/*gallery_path* --> gallery_path: galerien
+gallery_template: gallery_list.twig
