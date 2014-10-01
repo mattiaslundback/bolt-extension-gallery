@@ -17,12 +17,12 @@ class Extension extends \Bolt\BaseExtension
             'keywords' => "gallery",
             'author' => "blockmurder",
             'link' => "blockmurder.ch",
-            'version' => "0.1",
+            'version' => "1.1",
             'required_bolt_version' => "1.4",
             'highest_bolt_version' => "1.4",
             'type' => "General",
             'first_releasedate' => "2014-08-09",
-            'latest_releasedate' => "2014-08-09",
+            'latest_releasedate' => "2014-10-01",
             'dependencies' => "",
             'priority' => 10
         );
