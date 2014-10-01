@@ -73,8 +73,8 @@ class Extension extends \Bolt\BaseExtension
    	        $exif_ifd0 = exif_read_data ( $image ,'IFD0' ,0 );
    	        $exif = exif_read_data ( $image ,'EXIF' ,0 );
        	    
-            $data['path']  = $online_path.pathinfo($image)['basename'];
-            $data['name'] = preg_replace("/[^a-z0-9.]+/i", " ", pathinfo($image)['filename']);
+            $data['path']  = $online_path.$path_parts['basename'];
+            $data['name'] = preg_replace("/[^a-z0-9.]+/i", " ", $path_parts['filename']);
             $data['uploadDate']  = date ("Y-m-d H:i:s", filemtime($image));
             $data['model'] = $exif_ifd0['Model'];
             $data['focalLenth'] = $this->exif_get_length($exif);
