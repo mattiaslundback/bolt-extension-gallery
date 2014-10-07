@@ -100,7 +100,7 @@ class Extension extends \Bolt\BaseExtension
    	        $exif = exif_read_data ( $image ,'EXIF' ,0 );
        	    
             $data['path']  = $images['online'].$path_parts['basename'];
-            $data['name'] = preg_replace("/[^a-z0-9.]+/i", " ", $path_parts['filename']);
+            $data['name'] = preg_replace("/[^a-z0-9öäü.]+/i", " ", $path_parts['filename']);
             $data['uploadDate']  = date ("Y-m-d H:i:s", filemtime($image));
             $data['model'] = $exif_ifd0['Model'];
             $data['lens'] = $exif['XMP']['Lens'];
