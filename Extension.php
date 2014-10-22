@@ -1,7 +1,10 @@
 <?php
 // Gallery Extension for Bolt, by blockmurder
 
-namespace Bolt\Extension\Gallery;
+namespace Bolt\Extensions\Gallery;
+
+use Bolt\Application;
+use Bolt\BaseExtension;
 
 class Extension extends BaseExtension
 {
@@ -9,34 +12,13 @@ class Extension extends BaseExtension
     /**
      * Info block for Gallery Extension.
      */
-    public function info()
-    {
-        $data = array(
-            'name' => "Gallery",
-            'description' => "This extension allows you to create galleries from a specific folder in /files. It uses the title of the entry as folder",
-            'keywords' => "gallery",
-            'author' => "blockmurder",
-            'link' => "blockmurder.ch",
-            'version' => "1.1",
-            'required_bolt_version' => "1.4",
-            'highest_bolt_version' => "1.4",
-            'type' => "General",
-            'first_releasedate' => "2014-08-09",
-            'latest_releasedate' => "2014-10-01",
-            'dependencies' => "",
-            'priority' => 10
-        );
-
-        return $data;
-
-    }
 
     /**
      * Initialize Gallery. Called during bootstrap phase.
      */
     public function initialize(){
         // If your extension has a 'config.yml', it is automatically loaded.
-        if (empty($this->config['gallery_path'])) { $this->config['gallery_path'] = "gallerys/"; }
+        if (empty($this->config['gallery_path'])) { $this->config['gallery_path'] = "galleries/"; }
         if (empty($this->config['pathstructure'])) { $this->config['pathstructure'] = "by_year"; }
 
         // Initialize the Twig function
