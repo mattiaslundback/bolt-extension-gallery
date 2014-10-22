@@ -1,0 +1,22 @@
+{
+    "name": "bolt/Gallery",
+    "description": "This extension allows you to create galleries from a specific folder in /files. It uses the title of the entry as folder",
+    "type": "bolt-extension",
+    "require": {
+        "bolt/bolt": ">1.9,<3.0.0"
+    },
+    "license": "GPL v3+",
+    "authors": [{"name": "Matthias Renner", "email": "info@blockmurder.ch"}
+    ],
+    "autoload": {
+        "files": [
+            "init.php"
+        ],
+        "psr-4": {
+            "Bolt\\Extensions\\Gallery\\": ""
+        }
+    },
+    "extra": {
+        "bolt-assets": "assets"
+    }
+}

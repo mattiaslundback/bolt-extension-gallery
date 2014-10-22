@@ -1,9 +1,9 @@
 <?php
 // Gallery Extension for Bolt, by blockmurder
 
-namespace Gallery;
+namespace Bolt\Extension\Gallery;
 
-class Extension extends \Bolt\BaseExtension
+class Extension extends BaseExtension
 {
 
     /**
@@ -143,10 +143,11 @@ class Extension extends \Bolt\BaseExtension
         $fstop  = $this->exif_get_float($exif['FocalLength']);
         if ($fstop == 0) return false;
         return round($fstop,1).'mm';
-    } 
-
-
-
+    }
+    public function getName()
+    {
+        return "gallery";
+    }
 }
 
 
